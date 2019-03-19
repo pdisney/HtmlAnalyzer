@@ -1,0 +1,39 @@
+{
+  "name": "@pdisney1/htmlanalyzer",
+  "version": "1.0.0",
+  "description": "Module used to analyze html and extract tags of various types.",
+  "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "mocha": "^5.2.0",
+    "chai": "*",
+    "franc": "*",
+    "url": "*",
+    "valid-url": "*",
+    "utf8": "*",
+    "cheerio": "*"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha  ./tests/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pdisney/HtmlAnalyzer.git"
+  },
+  "keywords": [
+    "tag",
+    "extraction",
+    "html",
+    "regex",
+    "extract"
+  ],
+  "author": "Paul Disney",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pdisney/HtmlAnalyzer/issues"
+  },
+  "homepage": "https://github.com/pdisney/HtmlAnalyzer#readme"
+}
