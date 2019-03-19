@@ -31,10 +31,8 @@ var getBaseUrl = ($, url) => {
 
 var getTags = async (source_url, html, selector) => {
     try {
-
         $ = cheerio.load(html);
         source_url = getBaseUrl($, source_url);
-
         var selected_tags = $(selector);
         var tags = await processTags(selected_tags, source_url);
         return tags;
@@ -114,14 +112,14 @@ var containsTag = function (list, value) {
  * Returns inner HTML text for each tag.
  * @param {array} tags 
  */
-var getInnerText = (selector, $) => {
-    var tags = $(selector);
+var getInnerText = (tags) => {
+
+
     var text = '';
     for (var i = 0; i < tags.length; i++) {
-        var tag = $(tags[i]);
-        var html = $(tag).html();
-        tag.replaceWith(html);
-        text += " " + tag.html();
+        const $ = cheerio.load(tags[i]);
+        var html = $(tags[i]).html();
+        text += " " + html;
     }
     return text;
 }
@@ -168,13 +166,22 @@ class HtmlAnalyzer {
                 length = 10000
             }
             const $ = cheerio.load(html);
-            var textOnly = getInnerText(DIV, $);
-            if (textOnly.length < length)
-                textOnly += getInnerText(SPAN, $);
-            if (textOnly.length < length)
-                textOnly += getInnerText(PARAGRAPH, $);
-            if (textOnly.length < length)
-                textOnly += getInnerText(ANCHOR, $);
+
+            var tags = $(PARAGRAPH);
+            var textOnly = getInnerText(tags);
+
+            if (textOnly.length < length) {
+                tags = $(ANCHOR);
+                textOnly += getInnerText(tags);
+            }
+            if (textOnly.length < length) {
+                tags = $(SPAN);
+                textOnly += getInnerText(tags);
+            }
+            if (textOnly.length < length) {
+                tags = $(DIV);
+                textOnly += getInnerText(tags);
+            }
 
             textOnly = textOnly.replace(/<\/?[^>]+(>|$)/g, " ");
             textOnly = textOnly.replace(/(?:\r\n|\r|\n|\t)/g, " ");
@@ -685,25 +692,14 @@ class HtmlAnalyzer {
     getAllTags(source_url, html) {
         return (async () => {
             try {
-                var results = await Promise.all([
-                    this.getAllForms(source_url, html),
-                    this.getAllInputs(source_url, html),
-                    this.getAllButtons(source_url, html),
-                    this.getAllAnchors(source_url, html),
-                    this.getAllSpans(source_url, html),
-                    this.getAllSelects(source_url, html),
-                    this.getAllTextAreas(source_url, html),
-                    this.getAllImages(source_url, html)
-                ]);
                 var output = {};
-                output.forms = results[0];
-                output.inputs = results[1];
-                output.buttons = results[2];
-                output.anchors = results[3];
-                output.spans = results[4];
-                output.selects = results[5];
-                output.textareas = results[6];
-                output.images = results[7];
+                output.forms = await this.getAllForms(source_url, html);
+                output.buttons = await this.getAllButtons(source_url, html);
+                output.selects = await this.getAllSelects(source_url, html);
+                output.textareas = await this.getAllTextAreas(source_url, html);
+                output.inputs = await this.getAllInputs(source_url, html);
+                output.anchors = await this.getAllAnchors(source_url, html);
+                output.spans = await this.getAllSpans(source_url, html);
 
                 return output;
             } catch (err) {

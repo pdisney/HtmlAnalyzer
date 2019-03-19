@@ -33,12 +33,10 @@ describe('HtmlAnalyzer test', function () {
         var result = await htmlanalyzer.getAllTags(data.url, data.html);
 
         expect(result.textareas.length).to.be.eql(1);
-        expect(result.inputs.length).to.be.eql(8);
         expect(result.buttons.length).to.be.eql(1);
         expect(result.anchors.length).to.be.eql(11);
         expect(result.spans.length).to.be.eql(4);
         expect(result.selects.length).to.be.eql(2);
-        expect(result.images.length).to.be.eql(1);
     
       }catch(err){
         console.log(err);
