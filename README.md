@@ -29,21 +29,21 @@ console.log(alltags);
 There are 20 methods allowing access to common tags.  Below is an example of a convenience method that returns tags used for page navigation:
 
 ```js
-    const HtmlAnalyzer = require('HtmlAnalyzer');
+    const HtmlAnalyzer = require('@pdisney1/htmlanalyzer/HtmlAnalyzer');
     const htmlAnalyzer = new HtmlAnalyzer();
 
     var navigation_tags = await htmlAnalyer.getNavigationTags(source_url, html);
 
-    console.log(login_tags.letter_anchors);
-    console.log(login_tags.pagination_nav);
-    console.log(login_tags.group_nav);
+    console.log(navigation_tags.letter_anchors);
+    console.log(navigation_tags.pagination_nav);
+    console.log(navigation_tags.group_nav);
 ```
 
 Review the HtmlAnalyzer.js file for a list of all the convenience methods.  
 In addition, this module lets you look for a specific set of tags based on selector information.  See Below:
 
 ```js
-    const HtmlAnalyzer = require('HtmlAnalyzer');
+    const HtmlAnalyzer = require('@pdisney1/htmlanalyzer/HtmlAnalyzer');
     const htmlAnalyzer = new HtmlAnalyzer();
 
     var tags = await htmlanalyzer.getTags(data.url, data.html, 'a[href="http://test.com/product-pills-reviews.html"]');
@@ -64,7 +64,7 @@ This module also provides two additional utilites.  The getSampleText method pro
 
 See Below:
 ```js
-    const HtmlAnalyzer = require('HtmlAnalyzer');
+    const HtmlAnalyzer = require('@pdisney1/htmlanalyzer/HtmlAnalyzer');
     const htmlAnalyzer = new HtmlAnalyzer();
 
 
@@ -77,7 +77,7 @@ See Below:
 In addition, HtmlAnalyzer also provides a language inference method providing the ability to infer the language of an HTML input.  See Below:
 
 ```js
-    const HtmlAnalyzer = require('HtmlAnalyzer');
+    const HtmlAnalyzer = require('@pdisney1/htmlanalyzer/HtmlAnalyzer');
     const htmlAnalyzer = new HtmlAnalyzer();
 
 
