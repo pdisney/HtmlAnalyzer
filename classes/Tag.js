@@ -8,33 +8,38 @@ var endsWith = (str, suffix) => {
 }
 
 
-var getSelector = (link) => {
-    var selectorval = link.tag_type;
-    if (link.id.length > 0) {
-        selectorval += '[id="' + link.id + '"]';
+var getSelector = (tag) => {
+    var selectorval = tag.tag_type;
+    if (tag.id.length > 0) {
+        selectorval += '[id="' + tag.id + '"]';
     }
-    if (link.type.length > 0) {
-        selectorval += '[type="' + link.type + '"]';
+    if (tag.type.length > 0) {
+        selectorval += '[type="' + tag.type + '"]';
     }
-    if (link.name.length > 0) {
-        selectorval += '[name="' + link.name + '"]';
+    if (tag.name.length > 0) {
+        selectorval += '[name="' + tag.name + '"]';
     }
-    if (link.value.length > 0) {
-        selectorval += '[value="' + link.value + '"]';
+    if (tag.value.length > 0) {
+        selectorval += '[value="' + tag.value + '"]';
     }
-    if (link.length > 0) {
-        selectorval += '[title="' + link.title + '"]';
+    if (tag.title.length > 0) {
+        selectorval += '[title="' + tag.title + '"]';
     }
-    if (link.orig_href.length > 0) {
-        selectorval += '[href="' + link.orig_href + '"]';
-    } else {
-        if (link.href.length > 0) {
-            selectorval += '[href="' + link.href + '"]';
+    if (tag.tag_type === 'a') {
+        if (tag.orig_href.length > 0) {
+            selectorval += '[href="' + tag.orig_href + '"]';
+        } else {
+            if (tag.href.length > 0) {
+                selectorval += '[href="' + tag.href + '"]';
+            }
         }
     }
-    if (link.class.length > 0) {
-        link.class = link.class.replace(/ /g, '.');
-        selectorval += '.' + link.class;
+    if(tag.src.length>0){
+        selectorval += '[src="' + tag.src + '"]';
+    }
+    if (tag.class.length > 0) {
+        tag.class = tag.class.replace(/ /g, '.');
+        selectorval += '.' + tag.class;
     }
 
     return selectorval;
@@ -44,7 +49,7 @@ var getFullURI = (href, baseURI) => {
     try {
         var combinedUrl = URL.resolve(baseURI, href);
         if (validUrl.isWebUri(combinedUrl)) {
-             return URL.parse(combinedUrl);
+            return URL.parse(combinedUrl);
         } else {
             return URL.parse(href);
         }
@@ -69,6 +74,7 @@ class Tag {
         this.title = '';
         this.baseURI = '';
         this.href = '';
+        this.src = '';
         this.orig_href = '';
         this.outerHTML = '';
         this.innerHTML = '';
@@ -78,7 +84,7 @@ class Tag {
 
         if (baseurl && tag) {
             this.tag_type = tag.name;
-          
+
             this.baseURI = baseurl;
             const $ = cheerio.load(tag);
             this.outerHTML = '"' + $(tag) + '"';
@@ -99,22 +105,28 @@ class Tag {
                 this.class = tagAttributes.class;
             if (tagAttributes.href) {
                 this.orig_href = tagAttributes.href;
+                this.href = this.orig_href;
             }
             if (tagAttributes.src) {
-                this.orig_href = tagAttributes.src;
+                this.src = tagAttributes.src;
             }
+            this.selector = getSelector(this);
             this.uri = getFullURI(this.orig_href, baseurl);
             this.href = this.uri.href;
+            if(this.src.length>0){
+                var src = getFullURI(this.src, baseurl);
+                this.src = src.href;
+            }
             this.validHref = this.isValidHref();
-            this.selector = getSelector(this);
+            
 
 
         }
     }
 
 
-    isValidHref(){
-        return validUrl.isWebUri(this.href)!==undefined;
+    isValidHref() {
+        return validUrl.isWebUri(this.href) !== undefined;
     }
 
 
