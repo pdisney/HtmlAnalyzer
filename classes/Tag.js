@@ -28,14 +28,10 @@ var getSelector = (tag) => {
     if (tag.tag_type === 'a') {
         if (tag.orig_href.length > 0) {
             selectorval += '[href="' + tag.orig_href + '"]';
-        } else {
-            if (tag.href.length > 0) {
-                selectorval += '[href="' + tag.href + '"]';
-            }
         }
     }
     if(tag.src.length>0){
-        selectorval += '[src="' + tag.src + '"]';
+        selectorval += '[src="' + tag.orig_src + '"]';
     }
     if (tag.class.length > 0) {
         tag.class = tag.class.replace(/ /g, '.');
@@ -76,6 +72,7 @@ class Tag {
         this.href = '';
         this.src = '';
         this.orig_href = '';
+        this.orig_src = '';
         this.outerHTML = '';
         this.innerHTML = '';
         this.uri = '';
@@ -108,15 +105,22 @@ class Tag {
                 this.href = this.orig_href;
             }
             if (tagAttributes.src) {
-                this.src = tagAttributes.src;
+                this.orig_src = tagAttributes.src;
             }
-            this.selector = getSelector(this);
+          
             this.uri = getFullURI(this.orig_href, baseurl);
             this.href = this.uri.href;
-            if(this.src.length>0){
-                var src = getFullURI(this.src, baseurl);
+            if(this.orig_src.length>0){
+                var src = getFullURI(this.orig_src , baseurl);
                 this.src = src.href;
+                if(this.orig_href.length===0){
+
+                    this.orig_href = this.orig_src;
+                    this.href = src.href;
+                    this.uri = src;
+                }
             }
+            this.selector = getSelector(this);
             this.validHref = this.isValidHref();
             
 
