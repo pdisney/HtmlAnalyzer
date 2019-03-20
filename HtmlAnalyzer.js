@@ -36,7 +36,7 @@ var getTags = async (source_url, html, selector, tag_limit) => {
         var selected_tags = $(selector);
         if (tag_limit) {
             if (selected_tags.length > tag_limit) {
-                console.log("Selector:",selector, "contains", selected_tags.length, "tag(s) and has exceeded the tag limit of", tag_limit, ".  The", selector,"tags will be truncated to", tag_limit, "tag(s).")
+                console.log("Selector:", selector, "contains", selected_tags.length, "tag(s) and has exceeded the tag limit of", tag_limit, ".  The", selector, "tags will be truncated to", tag_limit, "tag(s).")
                 selected_tags = selected_tags.slice(0, tag_limit);
             }
         }
@@ -128,6 +128,19 @@ var getInnerText = (tags) => {
         text += " " + html;
     }
     return text;
+}
+
+
+var searchTagByType = function (tags, type) {
+    var result = false;
+    for (var i = 0; i < tags.length; i++) {
+        var input = tags[i];
+        if (input.type === type || input.tag_type === type) {
+            result = input;
+            break;
+        }
+    }
+    return result;
 }
 
 class HtmlAnalyzer {
@@ -615,105 +628,142 @@ class HtmlAnalyzer {
         })()
     }
 
-    getSearchTags(source_url, html, tag_limit) {
-        return (async () => {
-            try {
 
-                var results = await Promise.all([
-                    this.getAllInputs(source_url, html, tag_limit),
-                    this.getAllAnchors(source_url, html, tag_limit),
-                    this.getAllButtons(source_url, html, tag_limit),
-                    this.getAllForms(source_url, html, tag_limit)
-                ]);
 
-                var searchSubmit = results[0].concat(results[1]);
-                searchSubmit = searchSubmit.concat(results[2]);
-                var inputs = results[0];
-                //    var anchors = resuls[1];
-                //   var buttons = results[2];
-                var forms = results[3];
-                var output = {}
-                output.searchInput = [];
-                output.searchSubmit = [];
-                output.searchForms = [];
+/**
+ * Returns Search Specific HTML tags.  
+ * Ex.  <input type='search'  
+ *      <a href='search.html'
+ *      <input type='submit' > search
+ * @param {*} tags 
+ */
+getSearchInputAndSubmitLinks(searchTags){
 
-                for (var i = 0; i < inputs.length; i++) {
-                    var input = inputs[i];
-                    if (input.outerHTML.toLowerCase().indexOf('placeholder=') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('search') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('keyword') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('Marcador de posición=') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('buscar') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('palabra clave') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('products') !== -1 ||
-                        input.id === 'q' ||
-                        input.name === 'q' ||
-                        input.id === 's' ||
-                        input.name === 's' ||
-                        input.outerHTML.toLowerCase().indexOf('data[') !== -1) {
-                        output.searchInput.push(input);
-                    }
+    var search_input = searchTagByType(searchTags.searchInput, 'search');
+
+    if (!search_input) {
+        search_input = searchTagByType(searchTags.searchInput, 'text');
+    }
+    var contains_text_input = search_input !== undefined;
+
+    var search_submit = searchTagByType(searchTags.searchForms, FORM);
+    if (!search_submit) {
+        search_submit = searchTagByType(searchTags.searchSubmit, 'submit');
+    }
+    if (!search_submit) {
+        search_submit = searchTagByType(searchTags.searchSubmit, ANCHOR);
+    }
+    var contains_submit = search_submit !== undefined;
+
+    var output = {
+        'contains_input': contains_text_input,
+        'contains_submit': contains_submit,
+        'text_input': search_input,
+        'submit_input': search_submit
+    }
+
+    return output;
+}
+
+getSearchTags(source_url, html, tag_limit) {
+    return (async () => {
+        try {
+
+            var results = await Promise.all([
+                this.getAllInputs(source_url, html, tag_limit),
+                this.getAllAnchors(source_url, html, tag_limit),
+                this.getAllButtons(source_url, html, tag_limit),
+                this.getAllForms(source_url, html, tag_limit)
+            ]);
+
+            var searchSubmit = results[0].concat(results[1]);
+            searchSubmit = searchSubmit.concat(results[2]);
+            var inputs = results[0];
+            //    var anchors = resuls[1];
+            //   var buttons = results[2];
+            var forms = results[3];
+            var output = {}
+            output.searchInput = [];
+            output.searchSubmit = [];
+            output.searchForms = [];
+
+            for (var i = 0; i < inputs.length; i++) {
+                var input = inputs[i];
+                if (input.outerHTML.toLowerCase().indexOf('placeholder=') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('search') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('keyword') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('Marcador de posición=') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('buscar') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('palabra clave') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('products') !== -1 ||
+                    input.id === 'q' ||
+                    input.name === 'q' ||
+                    input.id === 's' ||
+                    input.name === 's' ||
+                    input.outerHTML.toLowerCase().indexOf('data[') !== -1) {
+                    output.searchInput.push(input);
                 }
-
-
-                for (var i = 0; i < searchSubmit.length; i++) {
-                    var input = searchSubmit[i];
-                    if ((input.outerHTML.toLowerCase().indexOf('search') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('find') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('go') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('query') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('quick') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('buscar') !== -1 ||
-                        input.outerHTML.toLowerCase().indexOf('encontrar') !== -1) &&
-                        input.type !== 'text') {
-                        output.searchSubmit.push(input);
-                    }
-                }
-
-
-                for (var i = 0; i < forms.length; i++) {
-                    var form = forms[i];
-                    if (form.outerHTML.toLowerCase().indexOf('search') !== -1 ||
-                        form.outerHTML.toLowerCase().indexOf('find') !== -1 ||
-                        form.outerHTML.toLowerCase().indexOf('quick') !== -1) {
-                        output.searchForms.push(form);
-                    }
-                }
-                return output;
-
-            } catch (err) {
-                console.error("Filter Search Tags ERROR", err);
-                throw err;
             }
+
+
+            for (var i = 0; i < searchSubmit.length; i++) {
+                var input = searchSubmit[i];
+                if ((input.outerHTML.toLowerCase().indexOf('search') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('find') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('go') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('query') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('quick') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('buscar') !== -1 ||
+                    input.outerHTML.toLowerCase().indexOf('encontrar') !== -1) &&
+                    input.type !== 'text') {
+                    output.searchSubmit.push(input);
+                }
+            }
+
+
+            for (var i = 0; i < forms.length; i++) {
+                var form = forms[i];
+                if (form.outerHTML.toLowerCase().indexOf('search') !== -1 ||
+                    form.outerHTML.toLowerCase().indexOf('find') !== -1 ||
+                    form.outerHTML.toLowerCase().indexOf('quick') !== -1) {
+                    output.searchForms.push(form);
+                }
+            }
+            return output;
+
+        } catch (err) {
+            console.error("Filter Search Tags ERROR", err);
+            throw err;
         }
-        )()
     }
+    )()
+}
 
 
-    /**
-     * Function returning all relevent Tags from source HTML
-     * @param {string} source_url 
-     * @param {string} html 
-     */
-    getAllTags(source_url, html, tag_limit) {
-        return (async () => {
-            try {
-                var output = {};
-                output.forms = await this.getAllForms(source_url, html, tag_limit);
-                output.buttons = await this.getAllButtons(source_url, html, tag_limit);
-                output.selects = await this.getAllSelects(source_url, html, tag_limit);
-                output.textareas = await this.getAllTextAreas(source_url, html, tag_limit);
-                output.inputs = await this.getAllInputs(source_url, html, tag_limit);
-                output.anchors = await this.getAllAnchors(source_url, html, tag_limit);
-                output.spans = await this.getAllSpans(source_url, html, tag_limit);
+/**
+ * Function returning all relevent Tags from source HTML
+ * @param {string} source_url 
+ * @param {string} html 
+ */
+getAllTags(source_url, html, tag_limit) {
+    return (async () => {
+        try {
+            var output = {};
+            output.forms = await this.getAllForms(source_url, html, tag_limit);
+            output.buttons = await this.getAllButtons(source_url, html, tag_limit);
+            output.selects = await this.getAllSelects(source_url, html, tag_limit);
+            output.textareas = await this.getAllTextAreas(source_url, html, tag_limit);
+            output.inputs = await this.getAllInputs(source_url, html, tag_limit);
+            output.anchors = await this.getAllAnchors(source_url, html, tag_limit);
+            output.spans = await this.getAllSpans(source_url, html, tag_limit);
 
-                return output;
-            } catch (err) {
-                throw err;
-            }
+            return output;
+        } catch (err) {
+            throw err;
+        }
 
-        })();
-    }
+    })();
+}
 
 }
 module.exports = HtmlAnalyzer;

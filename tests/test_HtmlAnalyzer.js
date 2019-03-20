@@ -317,5 +317,21 @@ it('Test getSearchTags', async function () {
   }
 });
 
+it('Test getSearchInputAndSubmitLinks', async function () {
+  var data = await readFile(__dirname+'/files/tag_extractor_test.json');
+  try{
+    var result = await htmlanalyzer.getSearchTags(data.url, data.html);
+    result = htmlanalyzer.getSearchInputAndSubmitLinks(result);
+  
+    expect(result.contains_input).to.be.eql(true);
+    expect(result.contains_submit).to.be.eql(true);
+    expect(result.text_input.id).to.be.eql('twotabsearchtextbox');
+    expect(result.submit_input.name).to.be.eql('site-search');
+ 
+  }catch(err){
+    console.log(err);
+  }
+});
+
 
 });
