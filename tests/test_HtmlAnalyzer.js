@@ -45,6 +45,24 @@ describe('HtmlAnalyzer test', function () {
 
   });
 
+  it('Test getAllTagsLimit', async function () {
+    var data = await readFile(__dirname+'/files/tag_extractor_test.json');
+    try{
+      var result = await htmlanalyzer.getAllTags(data.url, data.html,1);
+
+      expect(result.textareas.length).to.be.eql(1);
+      expect(result.buttons.length).to.be.eql(1);
+      expect(result.anchors.length).to.be.eql(1);
+      expect(result.spans.length).to.be.eql(1);
+      expect(result.selects.length).to.be.eql(1);
+  
+    }catch(err){
+      console.log(err);
+    }
+   
+
+});
+
   it('Test getAllFileTags', async function () {
     var data = await readFile(__dirname + '/files/tag_extractor_test.json');
     try {

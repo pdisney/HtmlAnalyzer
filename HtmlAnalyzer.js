@@ -29,11 +29,17 @@ var getBaseUrl = ($, url) => {
     return base_url;
 }
 
-var getTags = async (source_url, html, selector) => {
+var getTags = async (source_url, html, selector, tag_limit) => {
     try {
-        $ = cheerio.load(html);
+        const $ = cheerio.load(html);
         source_url = getBaseUrl($, source_url);
         var selected_tags = $(selector);
+        if (tag_limit) {
+            if (selected_tags.length > tag_limit) {
+                console.log("Selector:",selector, "contains", selected_tags.length, "tag(s) and has exceeded the tag limit of", tag_limit, ".  The", selector,"tags will be truncated to", tag_limit, "tag(s).")
+                selected_tags = selected_tags.slice(0, tag_limit);
+            }
+        }
         var tags = await processTags(selected_tags, source_url);
         return tags;
     } catch (err) {
@@ -130,10 +136,10 @@ class HtmlAnalyzer {
 
     }
 
-    getTags(source_url, html, selector) {
+    getTags(source_url, html, selector, tag_limit) {
         return (async () => {
             try {
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -236,11 +242,11 @@ class HtmlAnalyzer {
 
 
 
-    getSubmitAnchors(source_url, html) {
+    getSubmitAnchors(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var selector = ANCHOR + '[onclick]';
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -248,11 +254,11 @@ class HtmlAnalyzer {
         })();
     }
 
-    getSearchInputs(source_url, html) {
+    getSearchInputs(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var selector = INPUT + '[type="submit"]';
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -260,11 +266,11 @@ class HtmlAnalyzer {
         })();
     }
 
-    getTextInputs(source_url, html) {
+    getTextInputs(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var selector = '[type="text"]';
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -272,11 +278,11 @@ class HtmlAnalyzer {
         })();
     }
 
-    getTextImages(source_url, html) {
+    getTextImages(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var selector = INPUT + '[type="image"]';
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -284,22 +290,22 @@ class HtmlAnalyzer {
         })();
     }
 
-    getPasswordInputs(source_url, html) {
+    getPasswordInputs(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var selector = INPUT + '[type="password"]';
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
         })();
     }
 
-    getSubmitInputs(source_url, html) {
+    getSubmitInputs(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var selector = INPUT + '[type="submit"]';
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -307,11 +313,11 @@ class HtmlAnalyzer {
         })();
     }
 
-    getSubmitButtons(source_url, html) {
+    getSubmitButtons(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var selector = BUTTON + '[type="submit"]';
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -319,11 +325,11 @@ class HtmlAnalyzer {
         })();
     }
 
-    getSubmitForms(source_url, html) {
+    getSubmitForms(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var selector = FORM + '[action]';
-                return await getTags(source_url, html, selector);
+                return await getTags(source_url, html, selector, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -347,10 +353,10 @@ class HtmlAnalyzer {
      * 
      */
 
-    getAllForms(source_url, html) {
+    getAllForms(source_url, html, tag_limit) {
         return (async () => {
             try {
-                return await getTags(source_url, html, FORM);
+                return await getTags(source_url, html, FORM, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -358,10 +364,10 @@ class HtmlAnalyzer {
         })();
     }
 
-    getAllTextAreas(source_url, html) {
+    getAllTextAreas(source_url, html, tag_limit) {
         return (async () => {
             try {
-                return await getTags(source_url, html, TEXTAREA);
+                return await getTags(source_url, html, TEXTAREA, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -369,10 +375,10 @@ class HtmlAnalyzer {
         })();
     }
 
-    getAllInputs(source_url, html) {
+    getAllInputs(source_url, html, tag_limit) {
         return (async () => {
             try {
-                return await getTags(source_url, html, INPUT);
+                return await getTags(source_url, html, INPUT, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -380,10 +386,10 @@ class HtmlAnalyzer {
         })();
     }
 
-    getAllButtons(source_url, html) {
+    getAllButtons(source_url, html, tag_limit) {
         return (async () => {
             try {
-                return await getTags(source_url, html, BUTTON);
+                return await getTags(source_url, html, BUTTON, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -391,10 +397,10 @@ class HtmlAnalyzer {
         })();
     }
 
-    getAllAnchors(source_url, html) {
+    getAllAnchors(source_url, html, tag_limit) {
         return (async () => {
             try {
-                return await getTags(source_url, html, ANCHOR);
+                return await getTags(source_url, html, ANCHOR, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -402,10 +408,10 @@ class HtmlAnalyzer {
         })();
     }
 
-    getAllSpans(source_url, html) {
+    getAllSpans(source_url, html, tag_limit) {
         return (async () => {
             try {
-                return await getTags(source_url, html, SPAN);
+                return await getTags(source_url, html, SPAN, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -413,11 +419,11 @@ class HtmlAnalyzer {
         })();
     }
 
-    getAllSelects(source_url, html) {
+    getAllSelects(source_url, html, tag_limit) {
         return (async () => {
             try {
 
-                return await getTags(source_url, html, SELECT);
+                return await getTags(source_url, html, SELECT, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -425,10 +431,10 @@ class HtmlAnalyzer {
         })();
     }
 
-    getAllImages(source_url, html) {
+    getAllImages(source_url, html, tag_limit) {
         return (async () => {
             try {
-                return await getTags(source_url, html, IMAGES);
+                return await getTags(source_url, html, IMAGES, tag_limit);
             } catch (err) {
                 throw err;
             }
@@ -456,7 +462,7 @@ class HtmlAnalyzer {
      */
 
 
-    getAllFileTags(source_url, html, fileTypes) {
+    getAllFileTags(source_url, html, fileTypes, tag_limit) {
         return (async () => {
             try {
 
@@ -485,15 +491,15 @@ class HtmlAnalyzer {
         })();
     }
 
-    getLoginTags(source_url, html) {
+    getLoginTags(source_url, html, tag_limit) {
         return (async () => {
             try {
 
                 var results = await Promise.all([
-                    this.getPasswordInputs(source_url, html),
-                    this.getAllInputs(source_url, html),
-                    this.getAllAnchors(source_url, html),
-                    this.getAllButtons(source_url, html)
+                    this.getPasswordInputs(source_url, html, tag_limit),
+                    this.getAllInputs(source_url, html, tag_limit),
+                    this.getAllAnchors(source_url, html, tag_limit),
+                    this.getAllButtons(source_url, html, tag_limit)
 
                 ]);
 
@@ -547,10 +553,10 @@ class HtmlAnalyzer {
         })();
     }
 
-    getNavigationTags(source_url, html) {
+    getNavigationTags(source_url, html, tag_limit) {
         return (async () => {
             try {
-                var anchors = await this.getAllAnchors(source_url, html);
+                var anchors = await this.getAllAnchors(source_url, html, tag_limit);
 
                 var letter_anchors = [];    //A,B
                 var pagination_nav = [];   //NEXT, PREV
@@ -609,15 +615,15 @@ class HtmlAnalyzer {
         })()
     }
 
-    getSearchTags(source_url, html) {
+    getSearchTags(source_url, html, tag_limit) {
         return (async () => {
             try {
 
                 var results = await Promise.all([
-                    this.getAllInputs(source_url, html),
-                    this.getAllAnchors(source_url, html),
-                    this.getAllButtons(source_url, html),
-                    this.getAllForms(source_url, html)
+                    this.getAllInputs(source_url, html, tag_limit),
+                    this.getAllAnchors(source_url, html, tag_limit),
+                    this.getAllButtons(source_url, html, tag_limit),
+                    this.getAllForms(source_url, html, tag_limit)
                 ]);
 
                 var searchSubmit = results[0].concat(results[1]);
@@ -689,17 +695,17 @@ class HtmlAnalyzer {
      * @param {string} source_url 
      * @param {string} html 
      */
-    getAllTags(source_url, html) {
+    getAllTags(source_url, html, tag_limit) {
         return (async () => {
             try {
                 var output = {};
-                output.forms = await this.getAllForms(source_url, html);
-                output.buttons = await this.getAllButtons(source_url, html);
-                output.selects = await this.getAllSelects(source_url, html);
-                output.textareas = await this.getAllTextAreas(source_url, html);
-                output.inputs = await this.getAllInputs(source_url, html);
-                output.anchors = await this.getAllAnchors(source_url, html);
-                output.spans = await this.getAllSpans(source_url, html);
+                output.forms = await this.getAllForms(source_url, html, tag_limit);
+                output.buttons = await this.getAllButtons(source_url, html, tag_limit);
+                output.selects = await this.getAllSelects(source_url, html, tag_limit);
+                output.textareas = await this.getAllTextAreas(source_url, html, tag_limit);
+                output.inputs = await this.getAllInputs(source_url, html, tag_limit);
+                output.anchors = await this.getAllAnchors(source_url, html, tag_limit);
+                output.spans = await this.getAllSpans(source_url, html, tag_limit);
 
                 return output;
             } catch (err) {
