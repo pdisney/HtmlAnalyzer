@@ -1,6 +1,6 @@
 {
   "name": "@pdisney1/htmlanalyzer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Module used to analyze html and extract tags of various types.",
   "main": "server.js",
   "directories": {

@@ -32,8 +32,7 @@ There are 20 methods allowing access to common tags.  Below is an example of a c
     const HtmlAnalyzer = require('HtmlAnalyzer');
     const htmlAnalyzer = new HtmlAnalyzer();
 
-
-    var login_tags = await htmlAnalyer.getLoginTags(url, html);
+    var navigation_tags = await htmlAnalyer.getNavigationTags(source_url, html);
 
     console.log(login_tags.letter_anchors);
     console.log(login_tags.pagination_nav);
