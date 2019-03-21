@@ -134,99 +134,127 @@ Allows the selection of any HTML tag within a body of HTML.
     console.log(tags);
 ```
  
----
-
-
-##getSubmitAnchors
+[back to top](#table-of-contents)
 
 ---
 
-##getSearchInputs
+
+## getSubmitAnchors
+
+
+[back to top](#table-of-contents)
+---
+
+## getSearchInputs
+
+[back to top](#table-of-contents)
 
 ---
 
-##getTextInputs
+## getTextInputs
 
+
+[back to top](#table-of-contents)
 ---
     
-##getTextImages
+## getTextImages
+
+
+[back to top](#table-of-contents)
 
 ---
 
-##getPasswordInputs
+## getPasswordInputs
 
+[back to top](#table-of-contents)
 ---
 
-##getSubmitInputs
+## getSubmitInputs
 
+[back to top](#table-of-contents)
 ---
 
-##getSubmitButtons
+## getSubmitButtons
 
+[back to top](#table-of-contents)
 ---
 
-##getSubmitForms
+## getSubmitForms
 
+[back to top](#table-of-contents)
 ---
 
-##getAllForms
+## getAllForms
 
+[back to top](#table-of-contents)
 ---
 
-##getAllTextAreas
+## getAllTextAreas
 
+[back to top](#table-of-contents)
 ---
 
-##getAllInputs
+## getAllInputs
 
+[back to top](#table-of-contents)
 ---
 
-##getAllButtons
+## getAllButtons
 
+[back to top](#table-of-contents)
 ---
 
-##getAllAnchors
+## getAllAnchors
 
+[back to top](#table-of-contents)
 ---
 
-##getAllSpans
+## getAllSpans
 
+[back to top](#table-of-contents)
 ---
 
-##getAllSelects
+## getAllSelects
 
+[back to top](#table-of-contents)
 ---
 
-##getAllImages
+## getAllImages
 
----
-
-
-##getAllFileTags
-
----
-
-##getLoginTags
-
----
-
-##getNavigationTags
-
----
-
-
-
-##getSearchInputAndSubmitLinks
-
----
-
-##getSearchTags
-
+[back to top](#table-of-contents)
 ---
 
 
-##getAllTags
+## getAllFileTags
 
+[back to top](#table-of-contents)
+---
+
+## getLoginTags
+[back to top](#table-of-contents)
+---
+
+## getNavigationTags
+
+[back to top](#table-of-contents)
+---
+
+
+
+## getSearchInputAndSubmitLinks
+
+[back to top](#table-of-contents)
+---
+
+## getSearchTags
+
+[back to top](#table-of-contents)
+---
+
+
+## getAllTags
+
+[back to top](#table-of-contents)
 ---
 
 
