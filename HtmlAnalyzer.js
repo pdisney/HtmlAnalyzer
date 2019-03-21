@@ -637,7 +637,7 @@ class HtmlAnalyzer {
  *      <input type='submit' > search
  * @param {*} tags 
  */
-getSearchInputAndSubmitLinks(searchTags){
+getSearchInputAndSubmitTags(searchTags){
 
     var search_input = searchTagByType(searchTags.searchInput, 'search');
 

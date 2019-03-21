@@ -19,11 +19,32 @@ console.log(alltags);
 
 - [Convenience Methods](#convenience--methods)
 - [Extra Utilities](#extra--utilities)
-
+- [Full API](#api)
+- [getTags](#gettags)
+- [getSubmitAnchors](#getSubmitAnchors)
+- [getSearchInputs](#getSearchInputs)
+- [getTextInputs](#getTextInputs)
+- [getTextImages](#getTextImages)
+- [getPasswordInputs](#getPasswordInputs)
+- [getSubmitInputs](#getSubmitInputs)
+- [getSubmitButtons](#getSubmitButtons)
+- [getSubmitForms](#getSubmitForms)
+- [getAllForms](#getAllForms)
+- [getAllTextAreas](#getAllTextAreas)
+- [getAllInputs](#getAllInputs)
+- [getAllButtons](#getAllButtons)
+- [getAllAnchors](#getAllAnchors)
+- [getAllSpans](#getAllSpans)
+- [getAllSelects](#getAllSelects)
+- [getAllImages](#getAllImages)
+- [getAllFileTags](#getAllFileTags)
+- [getLoginTags](#getLoginTags)
+- [getNavigationTags](#getNavigationTags)
+- [getSearchInputAndSubmitTags](#getSearchInputAndSubmitTags)
+- [getSearchTags](#getSearchTags)
+- [getAllTags](#getAllTags)
 
 ---
-
-
 ## Convenience Methods
 
 There are 20 methods allowing access to common tags.  Below is an example of a convenience method that returns tags used for page navigation:
@@ -87,6 +108,128 @@ In addition, HtmlAnalyzer also provides a language inference method providing th
 
 
 [back to top](#table-of-contents)
+
+
+---
+
+## Full API
+
+Below is a list of all convenience methods for HTML analysis and class definitions.
+
+##getTags
+Allows the selection of any HTML tag within a body of HTML.  
+    Inputs :
+        URL - url for the html source.
+        HTML - HTML source data.
+        Selector - Tag selection string used to select a specific set of tags or a singular tag. example input[type="text"].classname
+        Tag Limit - Limits the number of possible tags selected.
+
+```js
+    const htmlAnalyzer = new HtmlAnalyzer();
+
+    var selector = "a[href='http://test.com/tester'][id='mainanchor']";
+    var textLimit = 1000;
+
+    var tags = await htmlAnalyer.getTags(url, html, selector, textLimit); 
+    console.log(tags);
+```
+ 
+---
+
+
+##getSubmitAnchors
+
+---
+
+##getSearchInputs
+
+---
+
+##getTextInputs
+
+---
+    
+##getTextImages
+
+---
+
+##getPasswordInputs
+
+---
+
+##getSubmitInputs
+
+---
+
+##getSubmitButtons
+
+---
+
+##getSubmitForms
+
+---
+
+##getAllForms
+
+---
+
+##getAllTextAreas
+
+---
+
+##getAllInputs
+
+---
+
+##getAllButtons
+
+---
+
+##getAllAnchors
+
+---
+
+##getAllSpans
+
+---
+
+##getAllSelects
+
+---
+
+##getAllImages
+
+---
+
+
+##getAllFileTags
+
+---
+
+##getLoginTags
+
+---
+
+##getNavigationTags
+
+---
+
+
+
+##getSearchInputAndSubmitLinks
+
+---
+
+##getSearchTags
+
+---
+
+
+##getAllTags
+
+---
+
+
 
 
 ---
