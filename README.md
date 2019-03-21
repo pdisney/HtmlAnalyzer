@@ -115,7 +115,7 @@ In addition, HtmlAnalyzer also provides a language inference method providing th
 ## Full API
 
 Below is a list of all convenience methods for HTML analysis and class definitions.
-
+---
 ##getTags
 Allows the selection of any HTML tag within a body of HTML.  
     Inputs :
@@ -232,7 +232,7 @@ Allows the selection of any HTML tag within a body of HTML.
 
 
 
----
+
 
 
 
