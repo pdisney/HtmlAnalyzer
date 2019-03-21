@@ -2,7 +2,7 @@ var URL = require('url');
 const path = require('path');
 const Tag = require('./Tag');
 
-const URL_EXTENTION_TO_INCLUDE = [
+const VALID_FILE_TYPES = [
     '.txt',
     '.pdf',
     '.ppt',
@@ -36,8 +36,8 @@ function endsWith(str, suffix) {
  * @param {string} href 
  */
 function hrefEndingValid(href) {
-    for (var i = 0; i < URL_EXTENTION_TO_INCLUDE.length; i++) {
-        var ending = URL_EXTENTION_TO_INCLUDE[i];
+    for (var i = 0; i < VALID_FILE_TYPES.length; i++) {
+        var ending = VALID_FILE_TYPES[i];
         if (endsWith(href, ending)) {
             return true;
         } else {
@@ -60,7 +60,7 @@ class FileTag extends Tag {
     constructor(baseurl, tag, includeTypes) {
         super(baseurl, tag);
         if (!includeTypes) {
-            this.includeTypes = URL_EXTENTION_TO_INCLUDE;
+            this.includeTypes = VALID_FILE_TYPES;
         }
         this.validFileType = this.isValidFileType();
 
