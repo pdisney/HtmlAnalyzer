@@ -116,7 +116,7 @@ In addition, HtmlAnalyzer also provides a language inference method providing th
 
 Below is a list of all convenience methods for HTML analysis and class definitions.
 ---
-##getTags
+## getTags
 Allows the selection of any HTML tag within a body of HTML.  
     Inputs :
         URL - url for the html source.
